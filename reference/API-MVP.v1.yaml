@@ -87,6 +87,42 @@ paths:
       description: Query the status of an airtime recharge request using its request id
       security:
         - API-KEY: []
+  /register:
+    post:
+      summary: register-app-user
+      tags:
+        - BVN
+        - email
+        - phone number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountRegistrationResponse'
+              examples: {}
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountRegistrationResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountRegistrationResponse'
+      operationId: post-register
+      description: Create a new user account on the EffesEYE platform
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRegistrationRequest'
+        description: The HTTP request payload containing the data needed to create the new account
+    parameters: []
 components:
   schemas:
     AirtimeRechargeResponse:
@@ -217,6 +253,46 @@ components:
         - message
         - requestId
         - statusCode
+    AccountRegistrationRequest:
+      title: AccountRegistrationRequest
+      type: object
+      properties:
+        bvn:
+          type: string
+          minLength: 11
+          maxLength: 11
+          description: The Bank Verification Number (BVN) of the new user
+        email:
+          type: string
+          format: email
+          description: A valid and functional email address for the user. The user will need to verify the email by clicking on a link in a message sent to it
+        phoneNumber:
+          type: string
+          minLength: 11
+          maxLength: 14
+          description: 'The phone number of the new user. Ideally, this should be the phone number associated with the BVN'
+      required:
+        - bvn
+        - email
+        - phoneNumber
+      description: The HTTP palyload for a new account registration on the EffesEYE platform
+    AccountRegistrationResponse:
+      title: AccountRegistrationResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: A status message on the registration request
+        accountId:
+          type: string
+          description: The account ID of the successfully registered user. Only present on succcessful registration
+        completed:
+          type: integer
+          description: The number of successfully completed registration steps
+      required:
+        - message
+        - completed
+      description: The HTTP response payload for account registration requests
   securitySchemes:
     API-KEY:
       name: EFFESEYE-API-KEY
