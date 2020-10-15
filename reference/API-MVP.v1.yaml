@@ -94,6 +94,7 @@ paths:
         - BVN
         - email
         - phone number
+        - registration
       responses:
         '200':
           description: OK
@@ -276,6 +277,11 @@ components:
         - email
         - phoneNumber
       description: The HTTP palyload for a new account registration on the EffesEYE platform
+      x-tags:
+        - BVN
+        - email
+        - phone number
+        - registration
     AccountRegistrationResponse:
       title: AccountRegistrationResponse
       type: object
@@ -293,6 +299,9 @@ components:
         - message
         - completed
       description: The HTTP response payload for account registration requests
+      x-tags:
+        - registration
+        - BVN
   securitySchemes:
     API-KEY:
       name: EFFESEYE-API-KEY
@@ -300,3 +309,7 @@ components:
       in: header
 tags:
   - name: airtime
+  - name: BVN
+  - name: email
+  - name: phone number
+  - name: registration
