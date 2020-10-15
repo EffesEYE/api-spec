@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: EffesEYE MVP API
+  version: '1.0'
+  contact:
+    email: chaluwa@gmail.com
+    name: Charles Odili
+    url: charlesodili.rocks
+  license:
+    name: MIT
+  description: The EffesEYE MVP API
+  termsOfService: effeseye.xyz/tc
+servers:
+  - url: api.effeseye.xyz
+    description: Prod
+  - url: api-staging.effeseye.xyz
+    description: Staging
+paths:
+  /airtime/recharge:
+    post:
+      summary: Buy airtime
+      tags:
+        - airtime
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeResponse'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeResponse'
+      operationId: post-airtime-recharge
+      description: buy airtime credit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AirtimeRechargeRequest'
+            examples: {}
+      security:
+        - API-KEY: []
+      parameters: []
+    parameters: []
+
+components:
+  schemas:
+    AirtimeRechargeResponse:
+      title: AirtimeRechargeResponse
+      type: object
+      description: 'HTTP response payload from an airtime recharge request. The `amount`, `currency`, `network`, `sendTo`, and `requestedBy` fields are only present when responding to a `GET` request since `POST` requests will already have such data.'
+      x-tags:
+        - airtime
+      x-examples:
+        successful-recharge:
+          message: recharge successful
+          requestId: dfd-453533-5gfds-453453453
+          recharged: true
+          requestStatus: DONE
+        failed-recharge:
+          message: recharge failed
+          requestId: dfsd-4534534535-gfd5-5435345353
+          recharged: false
+          requestStatus: DONE
+        pending-recharge:
+          message: pending recharge
+          requestId: 543-fgdt45-534534535-534535
+          recharged: false
+          requestStatus: IN-PROGRESS
+      properties:
+        message:
+          type: string
+          description: a message describing the status or progress of the airtime recharge request
+        requestId:
+          type: string
+          description: 'The id of the request. Can be handy when the request needs to be querried in the future e.g to see if the status has changed, or to build a transaction history.'
+        recharged:
+          type: boolean
+          description: Indicates if the recharge was successful (true) or not (false)
+        requestStatus:
+          type: string
+          enum:
+            - DONE
+            - IN-PROGRESS
+          description: The status for the airtime recharge request. Can either be DONE or IN-PROGRESS
+        amount:
+          type: integer
+          description: 'The airtime recharge amount, between 100 and 10,000 in specified currency'
+          minimum: 100
+          maximum: 10000
+        currency:
+          type: string
+          enum:
+            - NGN
+          description: 'The ISO-xx formatted currency of `amount` for the airtime purchase '
+        network:
+          type: string
+          enum:
+            - MTN
+            - Airtel
+            - Glo
+            - 9Mobile
+          description: The network provider whose airtime is being purchased
+        sendTo:
+          type: string
+          description: The phone number to credit the aritime to
+        requestedBy:
+          type: string
+          description: The phone number requesting the airtime recharge
+        accountToDebit:
+          type: string
+          description: Verified bank account to debit
+      required:
+        - message
+        - requestId
+        - recharged
+        - requestStatus
+    AirtimeRechargeRequest:
+      title: AirtimeRechargeRequest
+      type: object
+      x-tags:
+        - airtime
+      description: 'The HTTP request payload for an airtime recharge request. If the optional `network` field is not specified, it is inferred from the `requestedBy` phone number'
+      properties:
+        amount:
+          type: integer
+          description: 'The airtime recharge amount, between 100 and 10,000 in specified currency'
+          minimum: 100
+          maximum: 10000
+        currency:
+          type: string
+          enum:
+            - NGN
+          description: 'The ISO-xx formatted currency of `amount` for the airtime purchase '
+        network:
+          type: string
+          enum:
+            - MTN
+            - Airtel
+            - Glo
+            - 9Mobile
+          description: The network provider whose airtime is being purchased
+        sendTo:
+          type: string
+          description: The phone number to credit the aritime to
+        requestedBy:
+          type: string
+          description: The phone number requesting the airtime recharge
+        accountToDebit:
+          type: string
+          description: Verified bank account to debit
+      required:
+        - amount
+        - currency
+        - sendTo
+        - requestedBy
+        - accountToDebit
+  securitySchemes:
+    API-KEY:
+      name: API Key
+      type: apiKey
+      in: header
+tags:
+  - name: airtime
