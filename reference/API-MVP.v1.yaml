@@ -34,12 +34,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AirtimeRechargeResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeError'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AirtimeRechargeResponse'
+                $ref: '#/components/schemas/AirtimeRechargeError'
       operationId: post-airtime-recharge
       description: buy airtime credit
       requestBody:
@@ -52,7 +58,35 @@ paths:
         - API-KEY: []
       parameters: []
     parameters: []
-
+  '/airtime/recharge/{requestId}':
+    parameters:
+      - schema:
+          type: string
+        name: requestId
+        in: path
+        required: true
+        description: The request id of a previous airtime recharge request
+    get:
+      summary: get-airtime-recharge-status
+      tags:
+        - airtime
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirtimeRechargeError'
+      operationId: get-airtime-recharge-requestId
+      description: Query the status of an airtime recharge request using its request id
+      security:
+        - API-KEY: []
 components:
   schemas:
     AirtimeRechargeResponse:
@@ -165,9 +199,27 @@ components:
         - sendTo
         - requestedBy
         - accountToDebit
+    AirtimeRechargeError:
+      title: AirtimeRechargeError
+      type: object
+      description: The HTTP response payload for filed airtime recharge requests
+      properties:
+        message:
+          type: string
+          description: description of error
+        requestId:
+          type: string
+          description: The ID of the airtime recharge request
+        statusCode:
+          type: string
+          description: 'The corresponsding HTTP status code. E.g `401` if the required secuirty headers are absent, or `500` for a server / service error'
+      required:
+        - message
+        - requestId
+        - statusCode
   securitySchemes:
     API-KEY:
-      name: API Key
+      name: EFFESEYE-API-KEY
       type: apiKey
       in: header
 tags:
