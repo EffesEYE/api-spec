@@ -13,8 +13,6 @@ info:
 servers:
   - url: api.effeseye.xyz
     description: Prod
-  - url: api-staging.effeseye.xyz
-    description: Staging
 paths:
   /airtime/recharge:
     post:
@@ -268,9 +266,14 @@ components:
           type: string
           minLength: 11
           maxLength: 11
-          description: The Bank Verification Number (BVN) of the new user
+          description: The unique Bank Verification Number (BVN) of the new user
+        pswd:
+          type: string
+          minLength: 6
+          description: The user's password
       required:
         - bvn
+        - pswd
     AccountRegistrationResponse:
       title: AccountRegistrationResponse
       type: object
