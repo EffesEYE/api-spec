@@ -257,34 +257,27 @@ components:
     AccountRegistrationRequest:
       title: AccountRegistrationRequest
       type: object
-      properties:
-        bvn:
-          type: string
-          minLength: 11
-          maxLength: 11
-          description: The Bank Verification Number (BVN) of the new user
-        email:
-          type: string
-          format: email
-          description: A valid and functional email address for the user. The user will need to verify the email by clicking on a link in a message sent to it
-        phoneNumber:
-          type: string
-          minLength: 11
-          maxLength: 14
-          description: 'The phone number of the new user. Ideally, this should be the phone number associated with the BVN'
-      required:
-        - bvn
-        - email
-        - phoneNumber
       description: The HTTP palyload for a new account registration on the EffesEYE platform
       x-tags:
         - BVN
         - email
         - phone number
         - registration
+      properties:
+        bvn:
+          type: string
+          minLength: 11
+          maxLength: 11
+          description: The Bank Verification Number (BVN) of the new user
+      required:
+        - bvn
     AccountRegistrationResponse:
       title: AccountRegistrationResponse
       type: object
+      description: The HTTP response payload for account registration requests
+      x-tags:
+        - registration
+        - BVN
       properties:
         message:
           type: string
@@ -292,16 +285,8 @@ components:
         accountId:
           type: string
           description: The account ID of the successfully registered user. Only present on succcessful registration
-        completed:
-          type: integer
-          description: The number of successfully completed registration steps
       required:
         - message
-        - completed
-      description: The HTTP response payload for account registration requests
-      x-tags:
-        - registration
-        - BVN
   securitySchemes:
     API-KEY:
       name: EFFESEYE-API-KEY
