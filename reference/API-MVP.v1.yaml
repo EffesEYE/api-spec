@@ -103,8 +103,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountRegistrationResponse'
               examples: {}
-        '404':
-          description: Not Found
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
