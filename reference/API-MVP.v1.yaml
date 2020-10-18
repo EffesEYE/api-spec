@@ -205,6 +205,113 @@ paths:
         in: path
         description: The API version
         required: true
+  '/{version}/auth/user-login':
+    post:
+      summary: User authentication
+      tags:
+        - auth
+        - login
+        - email
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                example:
+                  value:
+                    message: login successful
+                    authToken: '567459867405764509769457694'
+                    refreshToken: '567459764957694567495674964'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                example:
+                  value:
+                    message: 'login failed, pls check your credentials and retry'
+      operationId: post-auth-user-login
+      description: The endpoint for authenticating users and granting access into the client application
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginReguest'
+            examples:
+              example:
+                value:
+                  pswd: pa55W0rd
+                  email: user@example.com
+        description: The HTTP request payload
+    parameters:
+      - schema:
+          type: string
+          minLength: 7
+          maxLength: 7
+          example: 2020-10
+          pattern: '^\d{4}-\d{2}$'
+        name: version
+        in: path
+        required: true
+        description: The API version
+  '/{version}/auth/admin-login':
+    post:
+      summary: Admin authentication
+      tags:
+        - auth
+        - login
+        - email
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                example:
+                  value:
+                    message: successful login
+                    authToken: 56745967457640597645967405492-348-239-42
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                example:
+                  value:
+                    message: unsuccessful login
+      operationId: post-auth-admin-login
+      description: The endpoint for authenticating administrators and granting access into the admin application
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginReguest'
+            examples:
+              example:
+                value:
+                  pswd: pa55W0rd
+                  email: user@example.com
+        description: The HTTP request payload
+    parameters:
+      - schema:
+          type: string
+          minLength: 7
+          maxLength: 7
+          pattern: '^\d{4}-\d{2}$'
+          example: 2020-10
+        name: version
+        in: path
+        required: true
+        description: The API version
 components:
   schemas:
     AirtimeRechargeResponse:
@@ -390,6 +497,35 @@ components:
       required:
         - message
       description: A pulse response from the EffesEYE API server
+    LoginReguest:
+      title: LoginReguest
+      type: object
+      description: The HTTP request payload schema
+      properties:
+        pswd:
+          type: string
+          minLength: 6
+          description: The user account password
+        email:
+          type: string
+          format: email
+          description: The user account email
+      required:
+        - pswd
+        - email
+    LoginResponse:
+      title: LoginResponse
+      type: object
+      description: HTTP response payload schema
+      properties:
+        message:
+          type: string
+          description: Status of the login attempt
+        authToken:
+          type: string
+          description: An authorization token provided on successful login. Automatically expires after 15 minutes
+      required:
+        - message
   securitySchemes:
     API-KEY:
       name: EFFESEYE-API-KEY
@@ -402,3 +538,5 @@ tags:
   - name: phone number
   - name: registration
   - name: ping
+  - name: auth
+  - name: login
