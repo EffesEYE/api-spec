@@ -2,8 +2,9 @@ name: Deploy
 
 # Run on each push to master
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-deploy-api-docs:
