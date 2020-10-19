@@ -18,9 +18,9 @@ jobs:
       - name: redoc-cli-github-action
         uses: seeebiii/redoc-cli-github-action@v9
         with:
-          args: 'bundle reference/API-MVP.v1.yaml -o docs/index.html'
+          args: 'bundle reference/API-MVP.v1.yaml -o index.html'
 
       - name: check result
         run: |
           ls -al
-          test -f docs/index.html || (echo "Missing petstore.html from previous step." && exit 1)
+          test -f index.html || (echo "Missing petstore.html from previous step." && exit 1)
