@@ -1,4 +1,4 @@
-name: test-deploy
+name: EffesEYE
 
 # Run on each push to master
 on:
@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  api-build:
+  build-deploy-api-docs:
     runs-on: ubuntu-latest
     name: Building API documentation
     steps:
