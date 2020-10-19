@@ -1,4 +1,4 @@
-name: EffesEYE
+name: Deploy
 
 # Run on each push to master
 on:
@@ -14,8 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: redoc-cli test
-        uses: ./ # Uses an action in the root directory
+      - name: redoc-cli-github-action
+        uses: seeebiii/redoc-cli-github-action@v9
         with:
           args: 'bundle reference/API-MVP.v1.yaml -o docs/index.html'
 
