@@ -1,0 +1,25 @@
+name: test-deploy
+
+# Run on each push to master
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  api-build:
+    runs-on: ubuntu-latest
+    name: Building API documentation
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: redoc-cli test
+        uses: ./ # Uses an action in the root directory
+        with:
+          args: 'bundle reference/API-MVP.v1.yaml -o docs/index.html'
+
+      - name: check result
+        run: |
+          ls -al
+          test -f docs/index.html || (echo "Missing petstore.html from previous step." && exit 1)
