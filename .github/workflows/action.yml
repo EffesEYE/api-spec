@@ -1,0 +1,2 @@
+- name: redoc-cli-github-action
+  uses: seeebiii/redoc-cli-github-action@v9
