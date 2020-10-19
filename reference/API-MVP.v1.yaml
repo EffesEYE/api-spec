@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: EffesEYE API
+  title: EffesEYE Platform API
   version: 2020-10
   contact:
     email: chaluwa@gmail.com
