@@ -384,6 +384,10 @@ paths:
     parameters:
       - schema:
           type: string
+          pattern: '^\d{4}-\d{2}$'
+          minLength: 7
+          maxLength: 7
+          example: 2020-10
         name: version
         in: path
         required: true
@@ -429,6 +433,10 @@ paths:
     parameters:
       - schema:
           type: string
+          pattern: '^\d{4}-\d{2}$'
+          minLength: 7
+          maxLength: 7
+          example: 2020-10
         name: version
         in: path
         required: true
@@ -468,6 +476,10 @@ paths:
     parameters:
       - schema:
           type: string
+          pattern: '^\d{4}-\d{2}$'
+          minLength: 7
+          maxLength: 7
+          example: 2020-10
         name: version
         in: path
         required: true
