@@ -8,7 +8,7 @@ info:
     url: charlesodili.rocks
   license:
     name: MIT
-  description: The EffesEYE MVP API
+  description: The EffesEYE API
   termsOfService: 'https://effeseye.herokuapp.com/tc'
 servers:
   - url: 'https://effeseye-api.herokuapp.com'
@@ -464,6 +464,47 @@ paths:
           name: Authorization
           description: The header containing a valid access token
           required: true
+  '/{version}/bo/payments':
+    parameters:
+      - schema:
+          type: string
+        name: version
+        in: path
+        required: true
+    get:
+      summary: Fetch payments collection
+      tags:
+        - admin
+        - payments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentsListingResponse'
+              examples:
+                example:
+                  value:
+                    message: payment successful
+                    data:
+                      - id: rgkdlkfj5695476947694
+                        amount: 1000
+                        currency: NGN
+                        type: AIRTIME
+                        status: SUCCEEDED
+                        when: 1603389358987
+                        details:
+                          network: Airtel
+      operationId: get-version-bo-payments
+      description: Fetch a collection of payments done on the patform
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: The header containing a valid access token
+          required: true
 components:
   schemas:
     AirtimeRechargeResponse:
@@ -639,13 +680,16 @@ components:
       title: UsersListingResponse
       type: object
       description: HTTP response payload for fetching a list of user (account) data
+      x-tags:
+        - admin
+        - user-data
       properties:
         message:
           type: string
           description: A message describing the handling of the request. Will be helful if there was an error
         data:
           type: array
-          description: An array containing user data objects
+          description: An array of user account data objects
           items:
             $ref: '#/components/schemas/UserData'
       required:
@@ -680,6 +724,68 @@ components:
         - email
         - lastseen
         - membersince
+      x-tags:
+        - admin
+        - user-data
+    PaymentsListingResponse:
+      title: PaymentsListingResponse
+      type: object
+      description: HTTP response payload for fetching payments data
+      properties:
+        message:
+          type: string
+          description: The request status description
+        data:
+          type: array
+          description: An array of payment data objects
+          items:
+            $ref: '#/components/schemas/PaymentData'
+      required:
+        - message
+    PaymentData:
+      title: PaymentData
+      type: object
+      description: Data representing a payment on the platform
+      properties:
+        id:
+          type: string
+          description: The payment record ID
+        amount:
+          type: number
+          description: The payment transaction amount
+        currency:
+          type: string
+          enum:
+            - NGN
+            - USD
+          description: The payment transaction currency
+        type:
+          type: string
+          enum:
+            - AIRTIME
+            - ELECTRICITY
+            - PAYTV
+          description: 'What was paid for. Either `Airtime`, `Electricity`, or `PayTV`'
+        status:
+          type: string
+          enum:
+            - PENDING
+            - FAILED
+            - SUCCEEDED
+          description: 'The status of the payment, which will either be `Failed`, `Pending`, or `Succeeded`'
+        when:
+          type: integer
+          description: A timestamp of when the payment occured
+        details:
+          type: object
+          description: Extra details and metadate about the payment. Specific to the type of payment
+      required:
+        - id
+        - amount
+        - currency
+        - type
+        - status
+        - when
   securitySchemes: {}
 tags:
   - name: airtime
@@ -693,3 +799,4 @@ tags:
   - name: spec
   - name: admin
   - name: user-data
+  - name: payments
