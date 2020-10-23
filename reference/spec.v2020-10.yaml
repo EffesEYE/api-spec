@@ -431,7 +431,7 @@ paths:
               example:
                 value:
                   token: 67760385-30483gdlfkglkdfgtu9564967540764674hgdflhglkfhl2309-5403485
-  '/bo/users/{version}':
+  '/{version}/bo/users':
     parameters:
       - schema:
           type: string
