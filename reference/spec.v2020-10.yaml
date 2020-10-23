@@ -714,6 +714,9 @@ components:
       title: UserData
       type: object
       description: Data represneting a user in the platform
+      x-tags:
+        - admin
+        - user-data
       properties:
         accountid:
           type: string
@@ -728,11 +731,11 @@ components:
           type: string
           description: The user's email address
         lastseen:
-          type: integer
           description: The timestamp of when the user last logged into the platform
+          type: string
         membersince:
-          type: integer
           description: The timestamp of when the account was created
+          type: string
       required:
         - accountid
         - firstname
@@ -740,9 +743,6 @@ components:
         - email
         - lastseen
         - membersince
-      x-tags:
-        - admin
-        - user-data
     PaymentsListingResponse:
       title: PaymentsListingResponse
       type: object
@@ -790,8 +790,8 @@ components:
             - SUCCEEDED
           description: 'The status of the payment, which will either be `Failed`, `Pending`, or `Succeeded`'
         when:
-          type: integer
           description: A timestamp of when the payment occured
+          type: string
         details:
           type: object
           description: Extra details and metadate about the payment. Specific to the type of payment
