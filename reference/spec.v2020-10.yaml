@@ -5,14 +5,25 @@ info:
   contact:
     email: chaluwa@gmail.com
     name: Charles Odili
-    url: charlesodili.rocks
   license:
     name: MIT
-  description: The EffesEYE API
-  termsOfService: 'https://effeseye.herokuapp.com/tc'
+  description: |-
+    ## The EffesEYE Platform API
+
+    Charles Odili just joined a fintech startup, EffesEYE, and was asked to lead the development of an urgent project on the table, a simple billing application.
+
+    In order to have a view on the practicality of this new product, the Board asked that he develop and present an MVP of this product to them at the next Management meeting.
+
+    Odili was required to build an MVP on the [FSI Sandbox](https://sandbox.fsi.ng/), integrated into the APIs of the available Banks and services of the Sandbox. This application can buy telephone credit, pay electricity bills and Pay TV bills (DSTV, Startimes, etc).
+
+
+    Odili adopted an API-first approach, and this is the documentation convering the API that drives the services and features the EffesEYE billing (MVP) platform provides to customers.
+
+    The API is deployed at [https://effeseye-api.herokuapp.com](https://effeseye-api.herokuapp.com), is managed by a secure admin application at [https://effeseye-admin.netlify.app](https://effeseye-admin.netlify.app), and is available for customers via an installable Progressive Web App at [https://effeseye-admin.netlify.app](https://effeseye-admin.netlify.app) 
+  termsOfService: 'https://effeseye-api.herokuapp.com/tc'
 servers:
   - url: 'https://effeseye-api.herokuapp.com'
-    description: Prod
+    description: Production
 paths:
   '/{version}/pay/{service}':
     post:
