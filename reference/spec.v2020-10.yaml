@@ -46,13 +46,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AirtimeRechargeError'
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AirtimeRechargeError'
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: post-airtime-recharge
       description: 'Buy airtime credit, pay for electricity or TV subscription with this endpoint'
       requestBody:
@@ -164,7 +164,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AirtimeRechargeError'
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-airtime-recharge-requestId
       description: Query the status of a payment transaction
       security:
@@ -533,6 +539,18 @@ paths:
                         email: chalu@example.com
                         lastseen: '2020-10-24T15:38:12.580Z'
                         membersince: '2020-10-24T15:38:12.580Z'
+        '401':
+          description: Unauthorized. Usually raised due to supplying an invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-version-bo-users
       description: Fetch a collection of registered users (accounts) on the platform
       parameters: []
@@ -575,11 +593,61 @@ paths:
                         when: '2020-10-24T15:35:41.000Z'
                         details:
                           network: Airtel
+        '401':
+          description: Unauthorized. Usually raised due to supplying an invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-version-bo-payments
       description: Fetch a collection of payments done on the patform
       parameters: []
       security:
         - Authorization: []
+  /account/add-bank:
+    post:
+      summary: Verify and add a (NUBAN) bank account
+      tags:
+        - NUBAN
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddBankAccountResponse'
+        '401':
+          description: Unauthorized. Usually raised due to supplying an invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: post-account-add-bank
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBankAccountRequest'
+            examples:
+              example:
+                value:
+                  nuban: '0037514056'
+        description: HTTP request payload to add a bank account
+      description: 'Verify and add a NUBAN (bank account) number to a user''s EffesEYE account, allowing them initiate payments from the bank accounts'
 components:
   schemas:
     PaymentResponse:
@@ -649,24 +717,16 @@ components:
         - currency
         - provider
         - sendTo
-    AirtimeRechargeError:
-      title: AirtimeRechargeError
+    ErrorResponse:
+      title: ErrorResponse
       type: object
-      description: The HTTP response payload for filed airtime recharge requests
+      description: The HTTP response payload for requests that terminated with errors
       properties:
         message:
           type: string
-          description: description of error
-        requestId:
-          type: string
-          description: The ID of the airtime recharge request
-        statusCode:
-          type: string
-          description: 'The corresponsding HTTP status code. E.g `401` if the required secuirty headers are absent, or `500` for a server / service error'
+          description: A statement or description of the error
       required:
         - message
-        - requestId
-        - statusCode
     AccountRegistrationRequest:
       title: AccountRegistrationRequest
       type: object
@@ -868,6 +928,35 @@ components:
         - type
         - status
         - when
+    AddBankAccountRequest:
+      title: AddBankAccountRequest
+      type: object
+      description: HTTP request payload to add a bank account
+      properties:
+        nuban:
+          type: string
+          minLength: 10
+          maxLength: 10
+          description: The NUBAN account number
+      required:
+        - nuban
+    AddBankAccountResponse:
+      title: AddBankAccountResponse
+      type: object
+      description: HTTP response payload from attempting to verify and add a NUBAN account
+      properties:
+        message:
+          type: string
+          description: description of handling the request
+        status:
+          type: string
+          enum:
+            - FAILED
+            - SUCCEEDED
+          description: The status of the operation
+      required:
+        - message
+        - status
   securitySchemes:
     Authorization:
       type: http
@@ -888,3 +977,4 @@ tags:
   - name: payments
   - name: electricity
   - name: paytv
+  - name: NUBAN
