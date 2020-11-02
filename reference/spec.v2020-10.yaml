@@ -734,7 +734,7 @@ components:
             > For electricity, this could be `EKDC`, `IKEDC`, `BEDC`, `IBEDC` e.t.c
         sendTo:
           type: string
-          description: 'The corresponding phone number, meter number, or TV subscription Id to credit this recharge to'
+          description: 'The corresponding phone number, meter number, or TV subscription Id to credit this recharge to. If this is a phone number, you are required to prefix it with your country phone code (+234 for Nigeria)'
         accountToDebit:
           type: string
           description: The verified (NUBAN) bank account to debit for this payment
